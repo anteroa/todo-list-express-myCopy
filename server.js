@@ -1,10 +1,10 @@
-const express = require('express')
-const app = express()
-const MongoClient = require('mongodb').MongoClient
-const PORT = 2121
-require('dotenv').config()
+const express = require('express') //import express npm module and set it to be accessed via the express const
+const app = express() //set express app variable to app
+const MongoClient = require('mongodb').MongoClient //use Mongolcient to connect using a mongo instance
+const PORT = 2121 //PORT number to be used by localhost 
+require('dotenv').config() //loads environment variables from .env file
 
-
+//Set db variables 
 let db,
     dbConnectionStr = process.env.DB_STRING,
     dbName = 'todo'
@@ -20,7 +20,6 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-
 app.get('/',async (request, response)=>{
     const todoItems = await db.collection('todos').find().toArray()
     const itemsLeft = await db.collection('todos').countDocuments({completed: false})
@@ -34,6 +33,7 @@ app.get('/',async (request, response)=>{
     // })
     // .catch(error => console.error(error))
 })
+
 
 app.post('/addTodo', (request, response) => {
     db.collection('todos').insertOne({thing: request.body.todoItem, completed: false})
